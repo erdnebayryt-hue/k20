@@ -1,2 +1,92 @@
 # k20
 standoff2 spin
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>K20 Spin</title>
+<style>
+  body { margin:0; font-family:sans-serif; background:#000; color:#0f0; text-align:center; }
+  h1 { margin-top:30px; font-size:2em; }
+  #wheel { margin:30px auto; width:300px; height:300px; border-radius:50%; border:10px solid #0f0; display:flex; align-items:center; justify-content:center; font-size:1.2em;}
+  #spinBtn { margin-top:20px; padding:10px 30px; font-size:1.2em; cursor:pointer; background:#0f0; color:#000; border:none; border-radius:10px; }
+  #result { margin-top:30px; font-size:1.2em; }
+  #spinsLeft { margin-top:10px; font-size:1em; }
+  #fbChat { margin-top:10px; padding:8px 20px; font-size:1em; cursor:pointer; background:#0f0; color:#000; border:none; border-radius:8px; display:none; }
+</style>
+</head>
+<body>
+
+<h1>Hello K20 байна</h1>
+<div id="spinsLeft">Танд 0 spin байна</div>
+<div id="wheel">SPIN WHEEL</div>
+<button id="spinBtn">SPIN</button>
+<div id="result"></div>
+<button id="fbChat">Facebook Chat</button>
+
+<script>
+// Spins тоо
+let spins = 0;
+
+// Reward тохируулга
+const rewards = [
+  {name:"100 gold", prob:12},
+  {name:"200 gold", prob:8},
+  {name:"500 gold", prob:4},
+  {name:"1000 gold", prob:3},
+  {name:"7000₮", prob:3},
+  {name:"10000₮", prob:3},
+  {name:"20000₮", prob:2},
+  {name:"LOSS", prob:65}
+];
+
+// Spins update
+function updateSpins() {
+  document.getElementById('spinsLeft').textContent = `Танд ${spins} spin байна`;
+}
+
+// Spin хийх function
+function spinWheel() {
+  if(spins <= 0){
+    alert("Танд spin байхгүй! 7000₮ төлж 2 spin авах хэрэгтэй.\n\n💳 Төлбөрийн мэдээлэл:\nБанк: XasBank\nНэр: Erdenebayr\nДанс: 5005863268\nIBAN: 88003200\nГүйлгээний утга: SPIN");
+    return;
+  }
+
+  spins--;
+  updateSpins();
+
+  // Random reward
+  let r = Math.random()*100;
+  let cumulative = 0;
+  let reward = "LOSS";
+  for(let i=0;i<rewards.length;i++){
+    cumulative += rewards[i].prob;
+    if(r <= cumulative){
+      reward = rewards[i].name;
+      break;
+    }
+  }
+
+  document.getElementById('result').textContent = `Таны шагнал: ${reward}`;
+
+  // Win бол FB чат гаргана
+  if(reward !== "LOSS"){
+    document.getElementById('fbChat').style.display = 'inline';
+  } else {
+    document.getElementById('fbChat').style.display = 'none';
+  }
+}
+
+// Facebook Chat товч
+document.getElementById('fbChat').onclick = function(){
+  window.open("https://m.me/YOUR_PAGE_USERNAME", "_blank");
+}
+
+// Spin товч
+document.getElementById('spinBtn').onclick = spinWheel;
+
+updateSpins();
+</script>
+
+</body>
+</html>
